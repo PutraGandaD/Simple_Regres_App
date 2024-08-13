@@ -15,7 +15,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.putragandad.simpleregresapp.presentation.R
 import com.putragandad.simpleregresapp.presentation.databinding.FragmentInitialScreenBinding
 import com.putragandad.simpleregresapp.presentation.viewmodel.SharedViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.navigation.koinNavGraphViewModel
 
 class InitialScreenFragment : Fragment() {
