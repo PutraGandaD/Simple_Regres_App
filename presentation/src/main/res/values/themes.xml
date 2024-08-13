@@ -5,6 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="android:fontFamily">@font/poppins_font_family</item>
         <item name="fontFamily">@font/poppins_font_family</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="Theme.SimpleRegresApp" parent="Base.Theme.SimpleRegresApp" />

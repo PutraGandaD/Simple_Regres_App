@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:hint="Name"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:fontFamily="@font/poppins_font_family"
                 android:background="@drawable/bg_edittext"
                 android:inputType="text" />
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:hint="Palindrome"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:fontFamily="@font/poppins_font_family"
                 android:background="@drawable/bg_edittext"
                 android:inputType="text" />
@@ -72,9 +72,24 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_checkPalindrome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Check"/>
+            app:cornerRadius="14dp"
+            android:text="Check"
+            android:textAllCaps="true"
+            android:backgroundTint="@color/primary_color"
+            android:layout_marginTop="40dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cornerRadius="14dp"
+            android:text="Next"
+            android:textAllCaps="true"
+            android:backgroundTint="@color/primary_color"
+            android:layout_marginTop="12dp" />
 
     </LinearLayout>
 
