@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/regresapp_navgraph"
+    app:startDestination="@id/initialScreenFragment">
+
+    <fragment
+        android:id="@+id/initialScreenFragment"
+        android:name="com.putragandad.simpleregresapp.presentation.fragment.initial.InitialScreenFragment"
+        android:label="fragment_initial_screen"
+        tools:layout="@layout/fragment_initial_screen" >
+        <action
+            android:id="@+id/action_initialScreenFragment_to_secondScreenFragment"
+            app:destination="@id/secondScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/secondScreenFragment"
+        android:name="com.putragandad.simpleregresapp.presentation.fragment.second.SecondScreenFragment"
+        android:label="fragment_second_screen"
+        tools:layout="@layout/fragment_second_screen" >
+        <action
+            android:id="@+id/action_secondScreenFragment_to_thirdScreenFragment"
+            app:destination="@id/thirdScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/thirdScreenFragment"
+        android:name="com.putragandad.simpleregresapp.presentation.fragment.third.ThirdScreenFragment"
+        android:label="fragment_third_screen"
+        tools:layout="@layout/fragment_third_screen" />
+</navigation>

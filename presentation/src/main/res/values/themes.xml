@@ -1,9 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.SimpleRegresApp" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.SimpleRegresApp" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:fontFamily">@font/poppins_font_family</item>
+        <item name="fontFamily">@font/poppins_font_family</item>
     </style>
 
     <style name="Theme.SimpleRegresApp" parent="Base.Theme.SimpleRegresApp" />
+
 </resources>
