@@ -8,10 +8,14 @@ import android.view.ViewGroup
 import com.putragandad.simpleregresapp.presentation.R
 import com.putragandad.simpleregresapp.presentation.databinding.FragmentSecondScreenBinding
 import com.putragandad.simpleregresapp.presentation.databinding.FragmentThirdScreenBinding
+import com.putragandad.simpleregresapp.presentation.viewmodel.SharedViewModel
+import org.koin.androidx.navigation.koinNavGraphViewModel
 
 class ThirdScreenFragment : Fragment() {
     private var _binding: FragmentThirdScreenBinding? = null
     private val binding get() = _binding!!
+
+    private val sharedViewModel by koinNavGraphViewModel<SharedViewModel>(R.id.regresapp_navgraph)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

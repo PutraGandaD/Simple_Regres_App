@@ -7,12 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.putragandad.simpleregresapp.presentation.R
-import com.putragandad.simpleregresapp.presentation.databinding.FragmentInitialScreenBinding
 import com.putragandad.simpleregresapp.presentation.databinding.FragmentSecondScreenBinding
+import com.putragandad.simpleregresapp.presentation.viewmodel.SharedViewModel
+import org.koin.androidx.navigation.koinNavGraphViewModel
 
 class SecondScreenFragment : Fragment() {
     private var _binding: FragmentSecondScreenBinding? = null
     private val binding get() = _binding!!
+
+    private val sharedViewModel by koinNavGraphViewModel<SharedViewModel>(R.id.regresapp_navgraph)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,6 +34,26 @@ class SecondScreenFragment : Fragment() {
 
         binding.btnNext.setOnClickListener {
             findNavController().navigate(R.id.action_secondScreenFragment_to_thirdScreenFragment)
+        }
+
+        observeInitialScreenName()
+        observeSelectedUserName()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun observeInitialScreenName() {
+        sharedViewModel.initialScreenName.observe(viewLifecycleOwner) { name ->
+            binding.tvName.text = name
+        }
+    }
+
+    private fun observeSelectedUserName() {
+        sharedViewModel.selectedUserName.observe(viewLifecycleOwner) { name ->
+            binding.tvUserName.text = name
         }
     }
 

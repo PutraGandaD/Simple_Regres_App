@@ -15,6 +15,7 @@
             android:id="@+id/iv_user"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/iv_user_picture_placeholder_test"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

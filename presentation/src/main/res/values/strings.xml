@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Simple Regres App</string>
     <string name="hello_blank_fragment">Hello World</string>
+    <string name="palindrome_check_result_dialog_title">Palindrome Check Result</string>
+    <string name="ispalindrome_result_text_dialog">isPalindrome</string>
+    <string name="notpalindrome_result_text_dialog">not palindrome</string>
 </resources>

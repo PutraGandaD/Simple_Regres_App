@@ -93,4 +93,5 @@ dependencies {
     implementation("io.insert-koin:koin-android")
     implementation("io.insert-koin:koin-core-coroutines")
     implementation("io.insert-koin:koin-androidx-workmanager")
+    implementation("io.insert-koin:koin-androidx-navigation")
 }
