@@ -5,11 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.finsera.common.utils.network.ConnectivityManager
+import com.putragandad.simpleregresapp.common.Resource
 import com.putragandad.simpleregresapp.domain.usecase.CheckPalindromeUseCase
 import com.putragandad.simpleregresapp.domain.usecase.GetListUserUseCase
+import com.putragandad.simpleregresapp.presentation.fragment.third.ThirdScreenUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SharedViewModel(
+    private val connectivityManager: ConnectivityManager,
     private val checkPalindromeUseCase: CheckPalindromeUseCase,
     private val getListUserUseCase: GetListUserUseCase
 ) : ViewModel() {
@@ -20,6 +28,9 @@ class SharedViewModel(
     private val _selectedUserName = MutableLiveData<String>()
     val selectedUserName: LiveData<String>
         get() = _selectedUserName
+
+    private val _thirdScreenUiState = MutableStateFlow(ThirdScreenUiState())
+    val thirdScreenUiState = _thirdScreenUiState.asStateFlow()
 
 
     fun setInitialScreenName(name: String) {
@@ -32,6 +43,35 @@ class SharedViewModel(
 
     fun checkPalindrome(word: String) : Boolean {
         return checkPalindromeUseCase.invoke(word)
+    }
+
+    fun getListUser(page: Int) = viewModelScope.launch {
+        if(connectivityManager.hasInternetConnection()) {
+            getListUserUseCase.invoke(page).collectLatest { result ->
+                when(result) {
+                    is Resource.Loading -> {
+                        _thirdScreenUiState.update { uiState ->
+                            uiState.copy(userData = emptyList(), isLoading = true, isSuccess = false, message = null)
+                        }
+                    }
+                    is Resource.Success -> {
+                        _thirdScreenUiState.update { uiState ->
+                            uiState.copy(userData = result.data?.data, isLoading = false, isSuccess = true, message = null)
+                        }
+                    }
+                    is Resource.Error -> {
+                        _thirdScreenUiState.update { uiState ->
+                            uiState.copy(userData = emptyList(), isLoading = false, isSuccess = false, message = result.message)
+                        }
+                    }
+                }
+            }
+        } else {
+            _thirdScreenUiState.update { uiState ->
+                uiState.copy(userData = emptyList(), isLoading = false, isSuccess = false, message = "Tidak ada koneksi internet")
+            }
+        }
+
     }
 
 }
