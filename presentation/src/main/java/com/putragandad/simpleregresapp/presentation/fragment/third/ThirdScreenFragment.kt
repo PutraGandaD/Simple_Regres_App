@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.google.android.material.snackbar.Snackbar
 import com.putragandad.simpleregresapp.domain.models.UserData
 import com.putragandad.simpleregresapp.presentation.R
@@ -34,7 +34,7 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
     private val userListAdapter = UserListAdapter(this)
 
     private var TOTAL_PAGES = 0 // total pages from api
-    private var TOTAL_ITEM_PER_PAGES = 0
+    private var CURRENT_PAGES = 0
     private var PAGE_COUNT_REQUEST = 1 // pages that we add to the api query
 
     override fun onCreateView(
@@ -52,6 +52,7 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
             findNavController().popBackStack()
         }
 
+        // rv adapter setup
         val layoutManager = binding.rvUserData.layoutManager as LinearLayoutManager
         binding.rvUserData.setLayoutManager(layoutManager)
         binding.rvUserData.adapter = userListAdapter
@@ -60,6 +61,7 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
 
         observer()
         handleScrollPagination()
+        handleSwipeToRefresh()
     }
 
     private fun observer() {
@@ -71,14 +73,22 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
                         TOTAL_PAGES = it
                     }
 
-                    // update total item per pages
-                    uiState.totalItemPerPages?.let {
-                        TOTAL_ITEM_PER_PAGES = it
+                    uiState.currentPage?.let {
+                        CURRENT_PAGES = it
                     }
 
-                    // submit/update data to recyclerview
-                    if(uiState.userData!!.isNotEmpty()) {
-                        addNewUsersDataToRV(uiState.userData)
+                    // if success and current page > 1, add data to list and update
+                    if(uiState.isSuccess && CURRENT_PAGES > 1) {
+                        //Toast.makeText(requireActivity(), "update", Toast.LENGTH_SHORT).show()
+                        addNewUsersDataToRV(uiState.userData!!)
+                        sharedViewModel.resetUiState()
+                    }
+
+                    // if success and current page == 1, submit data to list (replace)
+                    if(uiState.isSuccess && CURRENT_PAGES == 1) {
+                        //Toast.makeText(requireActivity(), "Fresh data", Toast.LENGTH_SHORT).show()
+                        userListAdapter.submitList(uiState.userData)
+                        sharedViewModel.resetUiState()
                     }
 
                     // handle error message
@@ -90,6 +100,11 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
                         sharedViewModel.messageThirdScreenShown()
                     }
 
+                    // detect refresh state
+                    if (uiState.isRefresh) {
+                        sharedViewModel.getListUser(PAGE_COUNT_REQUEST) // trigger getlistuser again
+                    }
+
                     // handle loading state
                     if(uiState.isLoading) {
                         binding.progressBar.visibility = View.VISIBLE
@@ -99,7 +114,7 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
                         binding.progressBarItem.visibility = View.GONE
                     }
 
-                    // handle if data isn't loading + api call not success (means error), show empty data
+                    // handle if api call not success (means error), show empty data state
                     if(uiState.isError && userListAdapter.currentList.isEmpty()) {
                         binding.tvDataEmpty.visibility = View.VISIBLE
                     } else {
@@ -121,10 +136,12 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
 
                 if (newState === RecyclerView.SCROLL_STATE_IDLE) {
                     val canScrollDownMore = recyclerView.canScrollVertically(1)
-                    if (!canScrollDownMore) {
-                        if(PAGE_COUNT_REQUEST < TOTAL_PAGES) {
+                    if(!binding.pullToRefreshRV.isRefreshing) { // check if user refresh or not
+                        if(!canScrollDownMore && PAGE_COUNT_REQUEST < TOTAL_PAGES) {
                             PAGE_COUNT_REQUEST++
                             sharedViewModel.getListUser(PAGE_COUNT_REQUEST)
+                        } else if (!canScrollDownMore && PAGE_COUNT_REQUEST >= TOTAL_PAGES) {
+                            Toast.makeText(requireActivity(), "You've reached max pages!", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -136,6 +153,14 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
         val currentList = userListAdapter.currentList.toMutableList() // copy current data from rv
         currentList.addAll(newUsers) // add data
         userListAdapter.submitList(currentList) // submit latest data
+    }
+
+    private fun handleSwipeToRefresh() {
+        binding.pullToRefreshRV.setOnRefreshListener(OnRefreshListener {
+            PAGE_COUNT_REQUEST = 1 // reset page count request to 1
+            sharedViewModel.beginRefreshStateThirdScreen()
+            binding.pullToRefreshRV.isRefreshing = false // set refresh state to false
+        })
     }
 
     override fun onUserClicked(userData: UserData) {

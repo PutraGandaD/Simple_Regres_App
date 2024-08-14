@@ -51,17 +51,41 @@ class SharedViewModel(
                 when(result) {
                     is Resource.Loading -> {
                         _thirdScreenUiState.update { uiState ->
-                            uiState.copy(totalPages = null, totalItemPerPages = null, userData = emptyList(), isLoading = true, isSuccess = false, isError = false, message = null)
+                            uiState.copy(
+                                totalPages = null,
+                                currentPage = null,
+                                userData = emptyList(),
+                                isLoading = true,
+                                isSuccess = false,
+                                isError = false,
+                                isRefresh = false,
+                                message = null)
                         }
                     }
                     is Resource.Success -> {
                         _thirdScreenUiState.update { uiState ->
-                            uiState.copy(totalPages = result.data?.totalPages, totalItemPerPages = result.data?.totalItemPerPages, userData = result.data?.data, isLoading = false, isSuccess = true, isError = false, message = null)
+                            uiState.copy(
+                                totalPages = result.data?.totalPages,
+                                currentPage = result.data?.currentPage,
+                                userData = result.data?.data,
+                                isLoading = false,
+                                isSuccess = true,
+                                isRefresh = false,
+                                isError = false,
+                                message = null)
                         }
                     }
                     is Resource.Error -> {
                         _thirdScreenUiState.update { uiState ->
-                            uiState.copy(totalPages = null, totalItemPerPages = null, userData = emptyList(), isLoading = false, isSuccess = false, isError = true, message = result.message)
+                            uiState.copy(
+                                totalPages = null,
+                                currentPage = null,
+                                userData = emptyList(),
+                                isLoading = false,
+                                isSuccess = false,
+                                isError = true,
+                                isRefresh = false,
+                                message = result.message)
                         }
                     }
                 }
@@ -80,4 +104,16 @@ class SharedViewModel(
         }
     }
 
+    fun resetUiState() {
+        // reset state
+        _thirdScreenUiState.update { currentUiState ->
+            currentUiState.copy(totalPages = null, currentPage = null, userData = emptyList(), isLoading = false, isSuccess = false, isError = true, isRefresh = false, message = null)
+        }
+    }
+
+    fun beginRefreshStateThirdScreen() {
+        _thirdScreenUiState.update { currentUiState ->
+            currentUiState.copy(isRefresh = true)
+        }
+    }
 }
