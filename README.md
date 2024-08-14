@@ -1,3 +1,6 @@
+## Build Downloads
+Go to Releases Page on the right side of your screen
+
 ## Architecture Overview
 - **app** = Dependency Injection + Android/Application Context
 - **common** = For reusable component for all layer
