@@ -53,7 +53,11 @@ class SecondScreenFragment : Fragment() {
 
     private fun observeSelectedUserName() {
         sharedViewModel.selectedUserName.observe(viewLifecycleOwner) { name ->
-            binding.tvUserName.text = name
+            name?.let {
+                binding.tvUserName.text = it
+            } ?: run {
+                binding.tvUserName.text = getString(R.string.choose_a_user_first_tv)
+            }
         }
     }
 

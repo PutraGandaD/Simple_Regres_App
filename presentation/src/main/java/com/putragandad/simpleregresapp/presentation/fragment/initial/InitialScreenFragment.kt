@@ -70,7 +70,8 @@ class InitialScreenFragment : Fragment() {
             val result = sharedViewModel.checkPalindrome(text)
             dialogPalindromeResult(result)
         } else {
-            Snackbar.make(requireView(), "Palindrome column is required to be filled to continue check palindrome.", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(),
+                getString(R.string.palindrome_column_required_error), Snackbar.LENGTH_SHORT).show()
         }
     }
 
@@ -97,7 +98,8 @@ class InitialScreenFragment : Fragment() {
             sharedViewModel.setInitialScreenName(name)
             findNavController().navigate(R.id.action_initialScreenFragment_to_secondScreenFragment)
         } else {
-            Snackbar.make(requireView(), "Name column is required to be filled to continue.", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(),
+                getString(R.string.name_column_required_error), Snackbar.LENGTH_SHORT).show()
         }
     }
 

@@ -80,7 +80,7 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
                     // if success and current page > 1, add data to list and update
                     if(uiState.isSuccess && CURRENT_PAGES > 1) {
                         //Toast.makeText(requireActivity(), "update", Toast.LENGTH_SHORT).show()
-                        addNewUsersDataToRV(uiState.userData!!)
+                        addNewUsersDataToRV(uiState.userData)
                         sharedViewModel.resetUiState()
                     }
 
@@ -149,9 +149,9 @@ class ThirdScreenFragment : Fragment(), OnItemClickListener {
         })
     }
 
-    private fun addNewUsersDataToRV(newUsers: List<UserData>) {
+    private fun addNewUsersDataToRV(newUsers: List<UserData>?) {
         val currentList = userListAdapter.currentList.toMutableList() // copy current data from rv
-        currentList.addAll(newUsers) // add data
+        currentList.addAll(newUsers ?: emptyList()) // add data
         userListAdapter.submitList(currentList) // submit latest data
     }
 

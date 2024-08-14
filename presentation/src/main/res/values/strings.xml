@@ -4,4 +4,7 @@
     <string name="palindrome_check_result_dialog_title">Palindrome Check Result</string>
     <string name="ispalindrome_result_text_dialog">isPalindrome</string>
     <string name="notpalindrome_result_text_dialog">not palindrome</string>
+    <string name="choose_a_user_first_tv">Choose a User First</string>
+    <string name="palindrome_column_required_error">Palindrome column is required to be filled to continue check palindrome.</string>
+    <string name="name_column_required_error">Name column is required to be filled to continue.</string>
 </resources>

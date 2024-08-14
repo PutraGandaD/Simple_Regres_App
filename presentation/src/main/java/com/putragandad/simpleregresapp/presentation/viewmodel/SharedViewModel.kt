@@ -25,8 +25,8 @@ class SharedViewModel(
     val initialScreenName : LiveData<String>
         get() = _initialScreenName
 
-    private val _selectedUserName = MutableLiveData<String>()
-    val selectedUserName: LiveData<String>
+    private val _selectedUserName = MutableLiveData<String?>(null)
+    val selectedUserName: LiveData<String?>
         get() = _selectedUserName
 
     private val _thirdScreenUiState = MutableStateFlow(ThirdScreenUiState())
@@ -35,6 +35,7 @@ class SharedViewModel(
 
     fun setInitialScreenName(name: String) {
         _initialScreenName.value = name
+        _selectedUserName.value = null
     }
 
     fun setSelectedUserName(name: String) {
