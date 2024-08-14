@@ -51,27 +51,33 @@ class SharedViewModel(
                 when(result) {
                     is Resource.Loading -> {
                         _thirdScreenUiState.update { uiState ->
-                            uiState.copy(userData = emptyList(), isLoading = true, isSuccess = false, message = null)
+                            uiState.copy(totalPages = null, totalItemPerPages = null, userData = emptyList(), isLoading = true, isSuccess = false, isError = false, message = null)
                         }
                     }
                     is Resource.Success -> {
                         _thirdScreenUiState.update { uiState ->
-                            uiState.copy(userData = result.data?.data, isLoading = false, isSuccess = true, message = null)
+                            uiState.copy(totalPages = result.data?.totalPages, totalItemPerPages = result.data?.totalItemPerPages, userData = result.data?.data, isLoading = false, isSuccess = true, isError = false, message = null)
                         }
                     }
                     is Resource.Error -> {
                         _thirdScreenUiState.update { uiState ->
-                            uiState.copy(userData = emptyList(), isLoading = false, isSuccess = false, message = result.message)
+                            uiState.copy(totalPages = null, totalItemPerPages = null, userData = emptyList(), isLoading = false, isSuccess = false, isError = true, message = result.message)
                         }
                     }
                 }
             }
         } else {
             _thirdScreenUiState.update { uiState ->
-                uiState.copy(userData = emptyList(), isLoading = false, isSuccess = false, message = "Tidak ada koneksi internet")
+                uiState.copy(totalPages = null, isError = true, userData = emptyList(), isLoading = false, isSuccess = false, message = "Tidak ada koneksi internet")
             }
         }
 
+    }
+
+    fun messageThirdScreenShown() {
+        _thirdScreenUiState.update { currentUiState ->
+            currentUiState.copy(message = null)
+        }
     }
 
 }

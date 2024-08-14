@@ -7,7 +7,9 @@ import com.putragandad.simpleregresapp.domain.models.UserPagination
 object ResponseMapper {
     fun userResponseToDomain(response: ListUserResponse) : UserPagination {
         return UserPagination(
-            page = response.page,
+            currentPage = response.page,
+            totalPages = response.totalPages,
+            totalItemPerPages = response.perPage,
             data = response.data?.map {
                 UserData(
                     avatar = it.avatar,
